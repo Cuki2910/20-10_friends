@@ -185,7 +185,6 @@
   </article>
   <p id="roast"></p>
   <div class="row">
-    <button class="btn gold" id="share">Gửi cho bạn khác</button>
     <button class="btn ghost" id="again">Chơi lại</button>
   </div>
   <p class="note" id="shareMsg" aria-live="polite">Chụp màn hình giấy khen rồi khoe đi.</p>
@@ -259,7 +258,7 @@ function rain(chars, n){
 function init(raw){
   F = FRIENDS[slug(raw)] || { name: raw, title: GENERIC_TITLE, roast: GENERIC_ROAST, wish: GENERIC_WISH };
   N = F.name;
-  LETTER = `${N} ơi, 20/10 này tui định mua hoa. Nhưng hoa héo sau vài ngày, còn điều tui muốn nói thì không nên hết hạn. Nên tui ngồi làm cái web này, để nói một câu: có ${N} trong đời, tui thấy may. Cảm ơn vì đã ở đây, cả những lúc tui chẳng dễ thương gì.`;
+  LETTER = `${N} ơi, 20/10 này bình thường mọi người sẽ mua hoa. Nhưng hoa héo sau vài ngày, còn tình bạn của chúng ta thì tui muốn không giờ héo úa. Vậy nên tui ngồi làm cái web này, để nói một câu: Cám ơn ${N} vì đã làm bạn với cuki, tui may mắn khi có một người bạn như ${N}. Cảm ơn vì đã ở đây, vì đã lắng nghe, vì đã chia sẻ, vì đã cười cùng tui, và cả những lúc tui làm ${N} mệt nữa. Tui mong tình bạn chúng ta sẽ còn mãi nhé. BẠN ${N} MÃI ĐỈNH`;
   $('envTo').textContent = `Gửi ${N}`;
   $('hi').textContent = `Chúc mừng 20/10, ${N}!`;
   $('cn').textContent = N;
@@ -367,14 +366,6 @@ $('nxt').onclick = () => { show('s3'); rain(['🎊','🎉','⭐','🌸'], 46); }
 
 // màn 3
 $('again').onclick = () => location.reload();
-$('share').onclick = async () => {
-  const u = location.href.split(/[?#]/)[0];            // link không kèm tên: bạn kia tự nhập tên mình
-  try {
-    if (navigator.share){ await navigator.share({ title:'Phiếu quà 20/10', text:'Có quà 20/10 cho bạn nè', url:u }); return; }
-    await navigator.clipboard.writeText(u);
-    $('shareMsg').textContent = 'Đã chép link. Dán cho bạn khác nhé.';
-  } catch { $('shareMsg').textContent = u; }
-};
 
 // nút "không cần quà" chạy trốn
 const no = $('no');
