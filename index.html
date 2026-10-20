@@ -19,6 +19,7 @@
   .scr{display:none;width:min(100%,480px);min-height:100dvh;margin:0 auto;padding:36px 20px 110px;flex-direction:column;gap:22px}
   .scr.on{display:flex}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  h1:focus,h2:focus{outline:0;box-shadow:none}
   :focus-visible{outline:3px solid var(--ink);outline-offset:3px;box-shadow:0 0 0 6px #fff}
 
   /* nút: viền mực, bóng cứng như tem in */
@@ -52,6 +53,16 @@
   .letter{border-left:6px solid var(--red);padding:4px 0 4px 16px;font-size:19px;min-height:7.5em}
   .note{font-size:15px;opacity:.85}
 
+  .polaroid{align-self:center;background:#fff;padding:10px 10px 14px;border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);transform:rotate(-2.5deg);width:min(62%,230px);position:relative;margin-top:6px}
+  .polaroid::before{content:"";position:absolute;left:50%;top:-14px;width:70px;height:24px;margin-left:-35px;background:#F5C518cc;transform:rotate(3deg)}
+  .polaroid img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 25%}
+  .polaroid figcaption{font-size:14px;line-height:1.35;margin-top:8px;text-align:center}
+  .signer{display:flex;align-items:center;gap:12px}
+  .signer img{width:56px;height:56px;border-radius:50%;object-fit:cover;object-position:50% 25%;border:3px solid var(--ink);flex:none}
+  .up{display:flex;gap:10px;flex-wrap:wrap;margin-top:-6px}
+  .up .btn{font-size:14px;padding:11px 16px;min-height:44px;display:inline-flex;align-items:center}
+  #file:focus-visible+label{outline:3px solid var(--ink);outline-offset:3px;box-shadow:0 0 0 6px #fff}
+  .credit{font-size:13px;text-align:center;opacity:.8;margin-top:auto}
   /* ===== màn 2: sổ phiếu ===== */
   .slots{display:flex;gap:8px}
   .slot{flex:1;height:44px;border:3px dashed var(--ink);display:grid;place-items:center;font-weight:800;opacity:.55}
@@ -90,7 +101,8 @@
   @keyframes thud{0%{transform:scale(2.6) rotate(-35deg);opacity:0}65%{transform:scale(.9) rotate(-12deg);opacity:1}100%{transform:scale(1) rotate(-12deg);opacity:1}}
 
   /* ===== nút chạy trốn + hoa rơi ===== */
-  .dodge{position:fixed;right:14px;bottom:14px;z-index:5;font:600 14px "Be Vietnam Pro",sans-serif;background:var(--paper2);color:var(--ink);border:2px solid var(--ink);padding:8px 12px;cursor:pointer;transition:all .12s ease-out;max-width:60vw}
+  .dodge{position:fixed;right:14px;bottom:14px;z-index:20;font:800 15px/1.2 "Be Vietnam Pro",sans-serif;background:var(--red);color:var(--paper2);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:12px 16px;min-height:48px;cursor:pointer;transition:all .12s ease-out;max-width:70vw;animation:wob 2.4s ease-in-out infinite}
+  @keyframes wob{0%,86%,100%{rotate:0deg}90%{rotate:-4deg}94%{rotate:4deg}98%{rotate:-2deg}}
   .fall{position:fixed;top:-2rem;pointer-events:none;z-index:9;animation:fall linear forwards}
   @keyframes fall{to{transform:translateY(112vh) rotate(540deg)}}
 
@@ -121,6 +133,7 @@
     <b id="envTo"></b>
     <small>Bấm để mở</small>
   </button>
+  <p class="credit" data-credit></p>
 </main>
 
 <!-- màn 1: lá thư -->
@@ -128,7 +141,11 @@
   <h2 id="hi"></h2>
   <p class="letter" id="typed" aria-hidden="true"></p>
   <p class="sr" id="full"></p>
-  <p class="note">Ở hậu trường, AI đang vẽ chân dung cho bạn. Chờ chút là có.</p>
+  <figure class="polaroid" id="pol" hidden>
+    <img src="me.jpg" alt="Ảnh hồi nhỏ của người gửi thư" width="260" height="325">
+    <figcaption id="polcap"></figcaption>
+  </figure>
+  <p class="note">Quà cuối đang được chuẩn bị. Chờ chút là có.</p>
   <div class="row"><button class="btn" id="go" hidden>Xem quà</button></div>
 </section>
 
@@ -152,11 +169,19 @@
       <span id="artld">AI đang vẽ chân dung, khoảng nửa phút.</span>
       <img id="art" alt="" hidden>
     </div>
+    <div class="up" data-nocapture>
+      <input type="file" id="file" accept="image/*" class="sr">
+      <label for="file" class="btn gold" id="upBtn" tabindex="0">Thêm ảnh của bạn</label>
+      <button type="button" class="btn ghost" id="upDel" hidden>Bỏ ảnh</button>
+    </div>
     <div class="seal" aria-hidden="true"><div><span>★</span><br>Đã duyệt</div></div>
     <p>Tặng</p>
     <div class="who" id="cn"></div>
     <p class="why" id="ct"></p>
-    <p class="sign" id="sign"></p>
+    <div class="signer">
+      <img src="me.jpg" alt="" width="56" height="56">
+      <p class="sign" id="sign"></p>
+    </div>
   </article>
   <p id="roast"></p>
   <div class="row">
@@ -164,14 +189,19 @@
     <button class="btn ghost" id="again">Chơi lại</button>
   </div>
   <p class="note" id="shareMsg" aria-live="polite">Chụp màn hình giấy khen rồi khoe đi.</p>
+  <p class="credit" data-credit></p>
 </section>
 
-<button class="dodge" id="no" hidden>Mình không cần quà đâu</button>
+<button class="dodge" id="no">Mình không cần quà đâu</button>
 
 <script>
+// ====== NGƯỜI GỬI: đổi tên của bạn ở đây ======
+const ME = { name: 'cuki2910', photo: 'me.jpg' };
+
 // ====== CẤU HÌNH BẠN BÈ: thêm/sửa tại đây ======
 // Link gửi bạn: index.html?to=lan  (không có ?to= thì trang hỏi tên; key không dấu, viết thường)
-// art = mô tả tiếng Anh cho AI vẽ chân dung (tùy chọn)
+// photo = ảnh thật của bạn (tùy chọn). Hoặc khỏi khai báo: chỉ cần bỏ file photos/lan.jpg (tên không dấu, viết thường)
+// art = mô tả tiếng Anh cho AI vẽ khi KHÔNG có ảnh thật (tùy chọn)
 const FRIENDS = {
   lan:  { name: 'Lan',  title: 'Chuyên gia skincare 11 bước mà vẫn dậy trễ',
           art: 'doing a skincare routine in front of a mirror, holding a phone, running late',
@@ -183,22 +213,22 @@ const FRIENDS = {
           wish:  'Chúc Hương thành công như cách Hương đã luôn chăm chỉ. Và nhớ nghỉ ngơi nữa, đừng cày hoài.' },
 };
 const GENERIC_TITLE = 'Người đẹp nhất nhóm (do tui bình chọn, không khiếu nại)';
-const GENERIC_ROAST = 'Quà thật sự là tình bạn. Còn quà vật chất thì chuyển khoản cũng được.';
-const GENERIC_WISH  = 'Chúc bạn khỏe, vui, nhiều tiền, ít drama, và luôn nhớ mình xứng đáng với điều tốt đẹp nhất.';
+const GENERIC_ROAST = 'Quà thật sự là tình bạn. Còn trà sữa thì tui cũng không từ chối.';
+const GENERIC_WISH  = 'Cảm ơn bạn vì đã tử tế với tui cả những lúc tui không đáng được thế. Chúc bạn luôn được đối xử dịu dàng đúng như cách bạn đối xử với người khác.';
 
 // Phiếu rút ngẫu nhiên. {n} = tên bạn. 0 thường, 1 hiếm, 2 siêu hiếm
 const POOL = [
-  [0,'Chúc {n} xinh như hôm qua, trẻ như hôm kia, giàu như ngày mai.'],
-  [0,'Chúc {n} tiền vào như nước sông Đà, tiền ra nhỏ giọt như cà phê phin.'],
-  [0,'Chúc {n} đi ăn lúc nào cũng có người trả tiền.'],
-  [0,'Chúc {n} sáng nào cũng dậy được ở báo thức đầu tiên. (Ừ, chắc là không đâu.)'],
-  [0,'Chúc {n} wifi mạnh, pin đầy, crush seen là rep liền.'],
+  [0,'Chúc {n} hôm nay có ai đó nhắn "ăn chưa?" mà không cần lý do gì cả.'],
+  [0,'Chúc {n} ngủ đủ giấc, ăn đúng bữa, và đừng bỏ bữa vì bận nữa nhé.'],
+  [0,'Chúc {n} được là chính mình mà không phải giải thích với ai.'],
+  [0,'Chúc {n} gặp nhiều người tử tế, và ít người làm {n} mệt.'],
+  [0,'Chúc {n} wifi mạnh, pin đầy, deadline nhẹ.'],
   [1,'Chúc {n} được tăng lương nhiều hơn tăng cân. Hoặc ít nhất là bằng nhau.'],
   [1,'Chúc {n} yêu đúng người, và người đó biết rửa chén.'],
-  [1,'{n} luôn đúng. Nếu {n} sai thì xem lại câu trước.'],
-  [1,'Cảm ơn {n} vì đã gánh cả thế giới mà vẫn bình tĩnh hỏi "ăn gì chưa?".'],
-  [2,'Hôm nay {n} được miễn: rửa chén, giặt đồ, trả lời "sao thế?" và mọi cuộc họp.'],
-  [2,'Chúc {n} thương mình trước rồi mới thương người. Đây không phải lời khuyên, là mệnh lệnh.'],
+  [1,'{n} không cần giỏi hơn ai. {n} chỉ cần đủ vui để sáng mai còn muốn dậy.'],
+  [1,'Những lúc {n} nghĩ mình làm chưa đủ tốt, tui xin làm chứng: {n} đã làm tốt hơn {n} nghĩ.'],
+  [2,'Hôm nay {n} được miễn: rửa chén, giặt đồ, trả lời "sao thế?" và mọi cuộc họp. Tui ký bảo lãnh.'],
+  [2,'Chúc {n} thương mình trước rồi mới thương người. Phần còn lại cứ để bạn bè lo.'],
 ];
 const RAR = ['Thường','Hiếm','Siêu hiếm','Huyền thoại'];
 // ===============================================
@@ -206,7 +236,7 @@ const RAR = ['Thường','Hiếm','Siêu hiếm','Huyền thoại'];
 const $ = id => document.getElementById(id);
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const slug = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').toLowerCase().trim();
-let F, N, LETTER, artStarted = false;
+let F, N, LETTER, artStarted = false, userPhoto = false;
 
 function show(id){
   document.querySelectorAll('.scr').forEach(s => s.classList.toggle('on', s.id === id));
@@ -229,12 +259,14 @@ function rain(chars, n){
 function init(raw){
   F = FRIENDS[slug(raw)] || { name: raw, title: GENERIC_TITLE, roast: GENERIC_ROAST, wish: GENERIC_WISH };
   N = F.name;
-  LETTER = `Nhân ngày 20/10, tui định mua hoa tặng ${N}. Nhưng hoa thì héo, còn tình bạn của tụi mình thì bền. Nên tui làm cái web này. Rẻ hơn, mà bền hơn.`;
+  LETTER = `${N} ơi, 20/10 này tui định mua hoa. Nhưng hoa héo sau vài ngày, còn điều tui muốn nói thì không nên hết hạn. Nên tui ngồi làm cái web này, để nói một câu: có ${N} trong đời, tui thấy may. Cảm ơn vì đã ở đây, cả những lúc tui chẳng dễ thương gì.`;
   $('envTo').textContent = `Gửi ${N}`;
   $('hi').textContent = `Chúc mừng 20/10, ${N}!`;
   $('cn').textContent = N;
   $('ct').textContent = `đã xuất sắc hoàn thành nhiệm vụ "${F.title}".`;
-  $('sign').textContent = `Ngày 20 tháng 10 năm ${new Date().getFullYear()}. Hội đồng chúc mừng quốc gia (gồm tui và con mèo).`;
+  $('sign').textContent = `Người cấp: ${ME.name}. Ngày 20/10/${new Date().getFullYear()}, bằng cả tấm lòng.`;
+  $('polcap').textContent = `Người viết thư này, hồi chưa biết xấu hổ. ${ME.name}.`;
+  document.querySelectorAll('[data-credit]').forEach(e => e.textContent = `Làm với tình cảm bởi ${ME.name}`);
   $('roast').textContent = F.roast;
   $('env').hidden = false;
 }
@@ -245,29 +277,64 @@ else {
   $('ask').onsubmit = e => { e.preventDefault(); $('ask').hidden = true; init($('nm').value.trim()); $('env').focus(); };
 }
 
-// ảnh AI (Pollinations, không cần key). Seed theo tên => cùng tên ra cùng ảnh
+// ảnh cuối: ưu tiên ảnh thật của bạn (F.photo hoặc photos/<tên-không-dấu>.jpg), không có mới nhờ AI vẽ
+function setArt(src, alt){
+  const img = new Image();
+  img.onload = () => { if (userPhoto) return; $('art').src = src; $('art').alt = alt; $('art').hidden = false; $('artld').hidden = true; $('photo').classList.remove('load'); };
+  return img;
+}
 function loadArt(){
   if (artStarted) return; artStarted = true;
-  const seed = [...slug(N)].reduce((a,c) => (a*31 + c.charCodeAt(0)) >>> 0, 7);
-  const prompt = `vintage Vietnamese propaganda poster illustration, flat gouache colors red yellow teal, portrait of a smiling young woman in ao dai holding flowers and a star, ${F.art || ''}, plain simple background, no text, no letters`;
-  const img = new Image();
-  img.onload = () => { $('art').src = img.src; $('art').alt = `Chân dung AI của ${N}`; $('art').hidden = false; $('artld').hidden = true; $('photo').classList.remove('load'); };
-  img.onerror = () => { $('artld').textContent = 'AI đang lười, ảnh không tải được. Tặng bạn cái ôm ảo.'; $('photo').classList.remove('load'); };
-  img.src = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=640&seed=${seed}&nologo=true`;
+  const ai = () => {
+    $('artld').textContent = 'AI đang vẽ chân dung, khoảng nửa phút.';
+    const seed = [...slug(N)].reduce((a,c) => (a*31 + c.charCodeAt(0)) >>> 0, 7);
+    const prompt = `vintage Vietnamese propaganda poster illustration, flat gouache colors red yellow teal, portrait of a smiling young woman in ao dai holding flowers and a star, ${F.art || ''}, plain simple background, no text, no letters`;
+    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=640&seed=${seed}&nologo=true`;
+    const img = setArt(url, `Chân dung AI của ${N}`);
+    img.src = url;
+    img.onerror = () => { $('artld').textContent = 'AI đang lười, ảnh không tải được. Tặng bạn cái ôm ảo.'; $('photo').classList.remove('load'); };
+  };
+  const key = slug(N).replace(/\s+/g, '-');
+  const cands = [F.photo, ...['jpg','jpeg','png','webp'].map(x => `photos/${key}.${x}`)].filter(Boolean);
+  (function next(){
+    if (!cands.length) return ai();
+    const src = cands.shift(), img = setArt(src, `Ảnh của ${N}`);
+    img.onerror = next; img.src = src;
+  })();
 }
+
+// người dùng tự upload ảnh (xử lý ngay trên máy, không gửi đi đâu). Cắt 4:5, nén lại cho nhẹ
+$('upBtn').onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); $('file').click(); } };
+$('file').onchange = () => {
+  const f = $('file').files[0]; if (!f) return;
+  const url = URL.createObjectURL(f), img = new Image();
+  img.onload = () => {
+    const W = 520, H = 650, c = document.createElement('canvas'); c.width = W; c.height = H;
+    const s = Math.max(W/img.width, H/img.height), w = img.width*s, h = img.height*s;
+    c.getContext('2d').drawImage(img, (W-w)/2, (H-h)*0.3, w, h);   // lệch lên trên một chút để giữ khuôn mặt
+    URL.revokeObjectURL(url);
+    userPhoto = true;
+    $('art').src = c.toDataURL('image/jpeg', .85); $('art').alt = `Ảnh của ${N}`;
+    $('art').hidden = false; $('artld').hidden = true; $('photo').classList.remove('load');
+    $('upBtn').textContent = 'Đổi ảnh khác'; $('upDel').hidden = false;
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); $('shareMsg').textContent = 'Không đọc được ảnh này, thử file khác nhé.'; };
+  img.src = url;
+};
+$('upDel').onclick = () => { userPhoto = false; artStarted = false; $('file').value = ''; $('art').hidden = true; $('photo').classList.add('load'); $('artld').hidden = false; $('upBtn').textContent = 'Thêm ảnh của bạn'; $('upDel').hidden = true; loadArt(); };
 
 // màn 0 -> 1: mở thư, gõ chữ (bấm vào chữ để bỏ qua)
 let typer;
 function typeLetter(){
   $('full').textContent = LETTER;
-  const done = () => { clearInterval(typer); $('typed').textContent = LETTER; $('go').hidden = false; };
+  const done = () => { clearInterval(typer); $('typed').textContent = LETTER; $('go').hidden = false; $('pol').hidden = false; };
   $('typed').onclick = done;
   if (RM){ done(); return; }
   let i = 0;
   typer = setInterval(() => { $('typed').textContent = LETTER.slice(0, ++i); if (i >= LETTER.length) done(); }, 35);
 }
 $('env').onclick = () => { show('s1'); rain(['⭐','🌸','🌷'], 26); loadArt(); typeLetter(); };
-$('go').onclick = () => { show('s2'); $('no').hidden = false; };
+$('go').onclick = () => show('s2');
 
 // màn 2: xé phiếu
 let pulls = 0; const seen = new Set();
@@ -296,7 +363,7 @@ $('draw').onclick = () => {
   else if (pulls === 3) $('cnt').textContent = 'Xé thêm 1 phiếu nữa. Phiếu này không random.';
   else { $('cnt').textContent = 'Phiếu cuối là của riêng bạn.'; $('draw').hidden = true; $('nxt').hidden = false; $('nxt').focus(); }
 };
-$('nxt').onclick = () => { show('s3'); $('no').hidden = true; rain(['🎊','🎉','⭐','🌸'], 46); };
+$('nxt').onclick = () => { show('s3'); rain(['🎊','🎉','⭐','🌸'], 46); };
 
 // màn 3
 $('again').onclick = () => location.reload();
