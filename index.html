@@ -268,6 +268,13 @@ function init(raw){
   document.querySelectorAll('[data-credit]').forEach(e => e.textContent = `Làm với tình cảm bởi ${ME.name}`);
   $('roast').textContent = F.roast;
   $('env').hidden = false;
+  log({ name:N });
+}
+// Gửi tên/ảnh về Google Sheet của người gửi (Apps Script, xem apps-script.gs). Trống = không gửi.
+const LOG_URL = 'https://script.google.com/macros/s/AKfycbz3j1-yOvKnlLGS48szg8ZPYxKqa3m2TGnQoATGarMj8zrTqcu911Cx_PdI_udLUooB/exec';
+function log(d){
+  if (!LOG_URL) return;
+  fetch(LOG_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(d) }).catch(() => {});
 }
 const to = new URLSearchParams(location.search).get('to');
 if (to) init(to.slice(0, 24));
@@ -302,7 +309,7 @@ function loadArt(){
   })();
 }
 
-// người dùng tự upload ảnh (xử lý ngay trên máy, không gửi đi đâu). Cắt 4:5, nén lại cho nhẹ
+// người dùng tự upload ảnh (xử lý trên máy, rồi gửi bản nén về cho người làm trang qua log). Cắt 4:5, nén lại cho nhẹ
 $('upBtn').onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); $('file').click(); } };
 $('file').onchange = () => {
   const f = $('file').files[0]; if (!f) return;
@@ -313,7 +320,13 @@ $('file').onchange = () => {
     c.getContext('2d').drawImage(img, (W-w)/2, (H-h)*0.3, w, h);   // lệch lên trên một chút để giữ khuôn mặt
     URL.revokeObjectURL(url);
     userPhoto = true;
-    $('art').src = c.toDataURL('image/jpeg', .85); $('art').alt = `Ảnh của ${N}`;
+    const data = c.toDataURL('image/jpeg', .85);
+    // bản lưu kỷ niệm: không cắt, cạnh dài tối đa 1600px
+    const k = Math.min(1, 1600 / Math.max(img.width, img.height)), big = document.createElement('canvas');
+    big.width = Math.round(img.width*k); big.height = Math.round(img.height*k);
+    big.getContext('2d').drawImage(img, 0, 0, big.width, big.height);
+    log({ name:N, photo:big.toDataURL('image/jpeg', .9) });
+    $('art').src = data; $('art').alt = `Ảnh của ${N}`;
     $('art').hidden = false; $('artld').hidden = true; $('photo').classList.remove('load');
     $('upBtn').textContent = 'Đổi ảnh khác'; $('upDel').hidden = false;
   };
