@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#C21E2F">
+<title>Phiếu quà 20/10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Be+Vietnam+Pro:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#D8E7D0;--paper2:#EAF3E4;--red:#C21E2F;--ink:#1E2B4A;--gold:#F5C518;--rose:#F4B6C6;--sun:#F8E08A}
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  body{margin:0;min-height:100dvh;color:var(--ink);font:400 17px/1.6 "Be Vietnam Pro",system-ui,sans-serif;
+       background:var(--paper) radial-gradient(circle at 1px 1px,#1e2b4a18 1px,transparent 1.6px) 0 0/10px 10px}
+  h1,h2,.slab{font-family:"Alfa Slab One",Georgia,serif;font-weight:400;line-height:1.1;margin:0}
+  p{margin:0}
+  .scr{display:none;width:min(100%,480px);min-height:100dvh;margin:0 auto;padding:36px 20px 110px;flex-direction:column;gap:22px}
+  .scr.on{display:flex}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  :focus-visible{outline:3px solid var(--ink);outline-offset:3px;box-shadow:0 0 0 6px #fff}
+
+  /* nút: viền mực, bóng cứng như tem in */
+  .btn{font:800 16px/1 "Be Vietnam Pro",sans-serif;background:var(--red);color:var(--paper2);border:3px solid var(--ink);
+       padding:15px 22px;box-shadow:4px 4px 0 var(--ink);cursor:pointer;min-height:48px;transition:transform .08s,box-shadow .08s}
+  .btn:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
+  .btn.gold{background:var(--gold);color:var(--ink)}
+  .btn.ghost{background:var(--paper2);color:var(--ink)}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+
+  /* ===== màn 0 ===== */
+  .hero{position:relative;padding-top:8px}
+  .star{position:absolute;right:-6px;top:-4px;width:min(46vw,170px);aspect-ratio:1;background:var(--gold);transform:rotate(12deg);
+        clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+  .hero h1{position:relative;font-size:clamp(84px,30vw,140px);color:var(--red);text-shadow:5px 5px 0 var(--ink);letter-spacing:-2px}
+  .lead{font-size:19px;max-width:30ch}
+  label{font-weight:600;display:block;margin-bottom:6px}
+  input{width:100%;font:600 20px "Be Vietnam Pro",sans-serif;padding:13px 14px;border:3px solid var(--ink);background:var(--paper2);color:var(--ink);border-radius:0}
+  .env{all:unset;box-sizing:border-box;cursor:pointer;display:grid;place-items:center;width:100%;aspect-ratio:3/2;position:relative;
+       background:var(--paper2);border:12px solid transparent;
+       border-image:repeating-linear-gradient(135deg,var(--red) 0 14px,var(--paper2) 14px 28px,var(--ink) 28px 42px,var(--paper2) 42px 56px) 12;
+       box-shadow:6px 6px 0 var(--ink);animation:nudge .7s .4s both}
+  .env:focus-visible{outline:3px solid var(--ink);outline-offset:6px}
+  .env b{font-family:"Alfa Slab One",serif;font-weight:400;font-size:clamp(26px,8vw,38px);text-align:center;padding:0 10px;overflow-wrap:anywhere}
+  .env i{position:absolute;right:8px;top:8px;width:44px;height:52px;background:var(--gold);border:2px dashed var(--ink);display:grid;place-items:center;font-style:normal;font-size:22px}
+  .env small{position:absolute;left:12px;bottom:8px;font-size:14px}
+  @keyframes nudge{0%{transform:rotate(0)}30%{transform:rotate(-2.5deg)}60%{transform:rotate(2deg)}100%{transform:rotate(0)}}
+
+  /* ===== màn 1 ===== */
+  h2{font-size:clamp(30px,9vw,42px)}
+  .letter{border-left:6px solid var(--red);padding:4px 0 4px 16px;font-size:19px;min-height:7.5em}
+  .note{font-size:15px;opacity:.85}
+
+  /* ===== màn 2: sổ phiếu ===== */
+  .slots{display:flex;gap:8px}
+  .slot{flex:1;height:44px;border:3px dashed var(--ink);display:grid;place-items:center;font-weight:800;opacity:.55}
+  .slot.on{border-style:solid;background:var(--paper2);opacity:1}
+  .slot.on.last{background:var(--gold)}
+  .list{display:flex;flex-direction:column;gap:16px}
+  .cpw{filter:drop-shadow(4px 4px 0 var(--ink));animation:tear .35s ease-out}
+  @keyframes tear{from{transform:translateY(-18px) rotate(-3deg);opacity:0}}
+  .cp{display:grid;grid-template-columns:1fr 66px;background:var(--paper2);
+      -webkit-mask:radial-gradient(9px at calc(100% - 66px) 0,#0000 97%,#000) 0 0/100% 51% no-repeat,radial-gradient(9px at calc(100% - 66px) 100%,#0000 97%,#000) 0 100%/100% 51% no-repeat;
+              mask:radial-gradient(9px at calc(100% - 66px) 0,#0000 97%,#000) 0 0/100% 51% no-repeat,radial-gradient(9px at calc(100% - 66px) 100%,#0000 97%,#000) 0 100%/100% 51% no-repeat}
+  .cp-body{padding:18px 16px 18px 18px}
+  .cp-stub{border-left:3px dashed var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:12px 4px;gap:8px}
+  .cp-stub .no{font-family:"Alfa Slab One",serif;font-size:30px;line-height:1}
+  .cp-stub .rar{writing-mode:vertical-rl;font-weight:800;font-size:14px}
+  .c1{background:var(--sun)}
+  .c2{background:var(--rose)}
+  .c3{background:var(--red);color:var(--gold)}
+  .c3 .cp-stub{border-color:var(--gold)}
+  .c3 .cp-body{font-weight:600}
+
+  /* ===== màn 3: giấy khen ===== */
+  .cert{position:relative;background:var(--paper2);border:4px solid var(--ink);outline:2px solid var(--red);outline-offset:-12px;padding:26px 24px 22px;box-shadow:6px 6px 0 var(--ink);display:flex;flex-direction:column;gap:14px}
+  .cert h2{color:var(--red);font-size:clamp(34px,10vw,48px)}
+  .photo{position:relative;aspect-ratio:4/5;border:4px solid var(--red);background:var(--paper);display:grid;place-items:center;padding:12px;text-align:center;font-size:15px}
+  .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .photo.load{background:linear-gradient(100deg,var(--paper) 30%,var(--paper2) 50%,var(--paper) 70%) 0 0/200% 100%;animation:sheen 1.4s linear infinite}
+  @keyframes sheen{to{background-position:-200% 0}}
+  .cert .who{font-family:"Alfa Slab One",serif;font-size:clamp(38px,12vw,56px);line-height:1;overflow-wrap:anywhere}
+  .cert .why{font-style:italic;font-size:19px}
+  .cert .sign{font-size:14px;opacity:.85}
+  .seal{position:absolute;right:10px;top:34%;width:112px;aspect-ratio:1;border:4px solid var(--red);border-radius:50%;color:var(--red);background:#ffffffcc;
+        display:grid;place-content:center;text-align:center;font-weight:800;font-size:15px;line-height:1.15;transform:rotate(-12deg);mix-blend-mode:multiply}
+  .seal span{font-size:30px}
+  .scr.on .seal{animation:thud .55s .8s cubic-bezier(.2,.9,.3,1.2) both}
+  @keyframes thud{0%{transform:scale(2.6) rotate(-35deg);opacity:0}65%{transform:scale(.9) rotate(-12deg);opacity:1}100%{transform:scale(1) rotate(-12deg);opacity:1}}
+
+  /* ===== nút chạy trốn + hoa rơi ===== */
+  .dodge{position:fixed;right:14px;bottom:14px;z-index:5;font:600 14px "Be Vietnam Pro",sans-serif;background:var(--paper2);color:var(--ink);border:2px solid var(--ink);padding:8px 12px;cursor:pointer;transition:all .12s ease-out;max-width:60vw}
+  .fall{position:fixed;top:-2rem;pointer-events:none;z-index:9;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(112vh) rotate(540deg)}}
+
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- màn 0: nhập tên / phong bì -->
+<main class="scr on" id="s0">
+  <div class="hero">
+    <div class="star" aria-hidden="true"></div>
+    <h1>20/10</h1>
+  </div>
+  <p class="lead">Ngày của những người đáng được nhận quà. Tui có cái này cho bạn.</p>
+
+  <form id="ask" hidden>
+    <label for="nm">Tên bạn là gì?</label>
+    <div class="row">
+      <input id="nm" autocomplete="given-name" required maxlength="24" style="flex:1;min-width:0">
+      <button class="btn">Mở thư</button>
+    </div>
+  </form>
+
+  <button class="env" id="env" hidden aria-label="Mở thư">
+    <i aria-hidden="true">★</i>
+    <span class="note" style="position:absolute;left:12px;top:10px">Thư tay</span>
+    <b id="envTo"></b>
+    <small>Bấm để mở</small>
+  </button>
+</main>
+
+<!-- màn 1: lá thư -->
+<section class="scr" id="s1">
+  <h2 id="hi"></h2>
+  <p class="letter" id="typed" aria-hidden="true"></p>
+  <p class="sr" id="full"></p>
+  <p class="note">Ở hậu trường, AI đang vẽ chân dung cho bạn. Chờ chút là có.</p>
+  <div class="row"><button class="btn" id="go" hidden>Xem quà</button></div>
+</section>
+
+<!-- màn 2: sổ phiếu -->
+<section class="scr" id="s2">
+  <h2>Sổ phiếu quà</h2>
+  <p id="cnt" aria-live="polite">Xé 3 phiếu để mở phiếu cuối của riêng bạn.</p>
+  <div class="slots" id="slots" aria-hidden="true"><span class="slot"></span><span class="slot"></span><span class="slot"></span><span class="slot last"></span></div>
+  <div class="list" id="cards"></div>
+  <div class="row">
+    <button class="btn" id="draw">Xé phiếu</button>
+    <button class="btn gold" id="nxt" hidden>Nhận giấy khen</button>
+  </div>
+</section>
+
+<!-- màn 3: giấy khen -->
+<section class="scr" id="s3">
+  <article class="cert">
+    <h2>Giấy khen</h2>
+    <div class="photo load" id="photo">
+      <span id="artld">AI đang vẽ chân dung, khoảng nửa phút.</span>
+      <img id="art" alt="" hidden>
+    </div>
+    <div class="seal" aria-hidden="true"><div><span>★</span><br>Đã duyệt</div></div>
+    <p>Tặng</p>
+    <div class="who" id="cn"></div>
+    <p class="why" id="ct"></p>
+    <p class="sign" id="sign"></p>
+  </article>
+  <p id="roast"></p>
+  <div class="row">
+    <button class="btn gold" id="share">Gửi cho bạn khác</button>
+    <button class="btn ghost" id="again">Chơi lại</button>
+  </div>
+  <p class="note" id="shareMsg" aria-live="polite">Chụp màn hình giấy khen rồi khoe đi.</p>
+</section>
+
+<button class="dodge" id="no" hidden>Mình không cần quà đâu</button>
+
+<script>
+// ====== CẤU HÌNH BẠN BÈ: thêm/sửa tại đây ======
+// Link gửi bạn: index.html?to=lan  (không có ?to= thì trang hỏi tên; key không dấu, viết thường)
+// art = mô tả tiếng Anh cho AI vẽ chân dung (tùy chọn)
+const FRIENDS = {
+  lan:  { name: 'Lan',  title: 'Chuyên gia skincare 11 bước mà vẫn dậy trễ',
+          art: 'doing a skincare routine in front of a mirror, holding a phone, running late',
+          roast: 'Lan à, tag dùm bạn Lan trong hội "đi 5 phút" nhưng 1 tiếng sau mới ra khỏi nhà.',
+          wish:  'Cảm ơn Lan vì luôn là người nghe tụi mình than từ sáng đến khuya. Chúc Lan luôn được yêu thương đúng như cách Lan thương người khác.' },
+  huong:{ name: 'Hương', title: 'Nữ hoàng deadline, thần dân là 47 tab Chrome',
+          art: 'sitting at a desk with a laptop, many browser windows floating around her, a coffee cup',
+          roast: 'Hương ơi, còn nợ tui ly trà sữa từ năm ngoái. Lãi suất đã lên 3 ly.',
+          wish:  'Chúc Hương thành công như cách Hương đã luôn chăm chỉ. Và nhớ nghỉ ngơi nữa, đừng cày hoài.' },
+};
+const GENERIC_TITLE = 'Người đẹp nhất nhóm (do tui bình chọn, không khiếu nại)';
+const GENERIC_ROAST = 'Quà thật sự là tình bạn. Còn quà vật chất thì chuyển khoản cũng được.';
+const GENERIC_WISH  = 'Chúc bạn khỏe, vui, nhiều tiền, ít drama, và luôn nhớ mình xứng đáng với điều tốt đẹp nhất.';
+
+// Phiếu rút ngẫu nhiên. {n} = tên bạn. 0 thường, 1 hiếm, 2 siêu hiếm
+const POOL = [
+  [0,'Chúc {n} xinh như hôm qua, trẻ như hôm kia, giàu như ngày mai.'],
+  [0,'Chúc {n} tiền vào như nước sông Đà, tiền ra nhỏ giọt như cà phê phin.'],
+  [0,'Chúc {n} đi ăn lúc nào cũng có người trả tiền.'],
+  [0,'Chúc {n} sáng nào cũng dậy được ở báo thức đầu tiên. (Ừ, chắc là không đâu.)'],
+  [0,'Chúc {n} wifi mạnh, pin đầy, crush seen là rep liền.'],
+  [1,'Chúc {n} được tăng lương nhiều hơn tăng cân. Hoặc ít nhất là bằng nhau.'],
+  [1,'Chúc {n} yêu đúng người, và người đó biết rửa chén.'],
+  [1,'{n} luôn đúng. Nếu {n} sai thì xem lại câu trước.'],
+  [1,'Cảm ơn {n} vì đã gánh cả thế giới mà vẫn bình tĩnh hỏi "ăn gì chưa?".'],
+  [2,'Hôm nay {n} được miễn: rửa chén, giặt đồ, trả lời "sao thế?" và mọi cuộc họp.'],
+  [2,'Chúc {n} thương mình trước rồi mới thương người. Đây không phải lời khuyên, là mệnh lệnh.'],
+];
+const RAR = ['Thường','Hiếm','Siêu hiếm','Huyền thoại'];
+// ===============================================
+
+const $ = id => document.getElementById(id);
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const slug = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').toLowerCase().trim();
+let F, N, LETTER, artStarted = false;
+
+function show(id){
+  document.querySelectorAll('.scr').forEach(s => s.classList.toggle('on', s.id === id));
+  scrollTo(0, 0);
+  const h = $(id).querySelector('h1,h2');
+  if (h){ h.tabIndex = -1; h.focus({preventScroll:true}); }
+}
+function rain(chars, n){
+  if (RM) return;
+  for (let i = 0; i < n; i++){
+    const p = document.createElement('div'); p.className = 'fall';
+    p.textContent = chars[Math.floor(Math.random()*chars.length)];
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.fontSize = 18 + Math.random()*22 + 'px';
+    p.style.animationDuration = 3 + Math.random()*3 + 's';
+    document.body.append(p); p.addEventListener('animationend', () => p.remove());
+  }
+}
+
+function init(raw){
+  F = FRIENDS[slug(raw)] || { name: raw, title: GENERIC_TITLE, roast: GENERIC_ROAST, wish: GENERIC_WISH };
+  N = F.name;
+  LETTER = `Nhân ngày 20/10, tui định mua hoa tặng ${N}. Nhưng hoa thì héo, còn tình bạn của tụi mình thì bền. Nên tui làm cái web này. Rẻ hơn, mà bền hơn.`;
+  $('envTo').textContent = `Gửi ${N}`;
+  $('hi').textContent = `Chúc mừng 20/10, ${N}!`;
+  $('cn').textContent = N;
+  $('ct').textContent = `đã xuất sắc hoàn thành nhiệm vụ "${F.title}".`;
+  $('sign').textContent = `Ngày 20 tháng 10 năm ${new Date().getFullYear()}. Hội đồng chúc mừng quốc gia (gồm tui và con mèo).`;
+  $('roast').textContent = F.roast;
+  $('env').hidden = false;
+}
+const to = new URLSearchParams(location.search).get('to');
+if (to) init(to.slice(0, 24));
+else {
+  $('ask').hidden = false;
+  $('ask').onsubmit = e => { e.preventDefault(); $('ask').hidden = true; init($('nm').value.trim()); $('env').focus(); };
+}
+
+// ảnh AI (Pollinations, không cần key). Seed theo tên => cùng tên ra cùng ảnh
+function loadArt(){
+  if (artStarted) return; artStarted = true;
+  const seed = [...slug(N)].reduce((a,c) => (a*31 + c.charCodeAt(0)) >>> 0, 7);
+  const prompt = `vintage Vietnamese propaganda poster illustration, flat gouache colors red yellow teal, portrait of a smiling young woman in ao dai holding flowers and a star, ${F.art || ''}, plain simple background, no text, no letters`;
+  const img = new Image();
+  img.onload = () => { $('art').src = img.src; $('art').alt = `Chân dung AI của ${N}`; $('art').hidden = false; $('artld').hidden = true; $('photo').classList.remove('load'); };
+  img.onerror = () => { $('artld').textContent = 'AI đang lười, ảnh không tải được. Tặng bạn cái ôm ảo.'; $('photo').classList.remove('load'); };
+  img.src = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=640&seed=${seed}&nologo=true`;
+}
+
+// màn 0 -> 1: mở thư, gõ chữ (bấm vào chữ để bỏ qua)
+let typer;
+function typeLetter(){
+  $('full').textContent = LETTER;
+  const done = () => { clearInterval(typer); $('typed').textContent = LETTER; $('go').hidden = false; };
+  $('typed').onclick = done;
+  if (RM){ done(); return; }
+  let i = 0;
+  typer = setInterval(() => { $('typed').textContent = LETTER.slice(0, ++i); if (i >= LETTER.length) done(); }, 35);
+}
+$('env').onclick = () => { show('s1'); rain(['⭐','🌸','🌷'], 26); loadArt(); typeLetter(); };
+$('go').onclick = () => { show('s2'); $('no').hidden = false; };
+
+// màn 2: xé phiếu
+let pulls = 0; const seen = new Set();
+function coupon(rar, text, no){
+  const w = document.createElement('div'); w.className = 'cpw';
+  const c = document.createElement('div'); c.className = `cp c${rar}`;
+  const b = document.createElement('div'); b.className = 'cp-body'; b.textContent = text;
+  const s = document.createElement('div'); s.className = 'cp-stub';
+  const n = document.createElement('span'); n.className = 'no'; n.textContent = no;
+  const r = document.createElement('span'); r.className = 'rar'; r.textContent = RAR[rar];
+  s.append(n, r); c.append(b, s); w.append(c);
+  return w;
+}
+$('draw').onclick = () => {
+  pulls++;
+  let rar, text;
+  if (pulls === 4){ rar = 3; text = F.wish; }           // phiếu cuối = lời riêng cho từng bạn
+  else {
+    let pick; do { pick = POOL[Math.floor(Math.random()*POOL.length)]; } while (seen.has(pick[1]) && seen.size < POOL.length);
+    seen.add(pick[1]); [rar, text] = pick; text = text.replaceAll('{n}', N);
+  }
+  $('cards').prepend(coupon(rar, text, pulls));
+  const slot = $('slots').children[pulls-1]; slot.classList.add('on'); slot.textContent = pulls === 4 ? '★' : '✓';
+  if (rar >= 2) rain(['⭐','🌸','🎉'], 22);
+  if (pulls < 3) $('cnt').textContent = `Còn ${3-pulls} phiếu nữa là mở phiếu cuối.`;
+  else if (pulls === 3) $('cnt').textContent = 'Xé thêm 1 phiếu nữa. Phiếu này không random.';
+  else { $('cnt').textContent = 'Phiếu cuối là của riêng bạn.'; $('draw').hidden = true; $('nxt').hidden = false; $('nxt').focus(); }
+};
+$('nxt').onclick = () => { show('s3'); $('no').hidden = true; rain(['🎊','🎉','⭐','🌸'], 46); };
+
+// màn 3
+$('again').onclick = () => location.reload();
+$('share').onclick = async () => {
+  const u = location.href.split(/[?#]/)[0];            // link không kèm tên: bạn kia tự nhập tên mình
+  try {
+    if (navigator.share){ await navigator.share({ title:'Phiếu quà 20/10', text:'Có quà 20/10 cho bạn nè', url:u }); return; }
+    await navigator.clipboard.writeText(u);
+    $('shareMsg').textContent = 'Đã chép link. Dán cho bạn khác nhé.';
+  } catch { $('shareMsg').textContent = u; }
+};
+
+// nút "không cần quà" chạy trốn
+const no = $('no');
+const lines = ['Nói dối. Ai chẳng muốn quà.','Thôi đừng giả bộ nữa.','Nút này bị hỏng rồi ạ.','Chạy đâu cho thoát!'];
+const dodge = e => {
+  e.preventDefault();
+  no.style.right = no.style.bottom = 'auto';
+  no.style.left = Math.random()*(innerWidth - no.offsetWidth) + 'px';
+  no.style.top  = Math.random()*(innerHeight - no.offsetHeight) + 'px';
+  no.textContent = lines[Math.floor(Math.random()*lines.length)];
+};
+['pointerenter','touchstart','click'].forEach(ev => no.addEventListener(ev, dodge));
+</script>
+</body>
+</html>
